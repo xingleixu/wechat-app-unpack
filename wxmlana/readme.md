@@ -1,6 +1,6 @@
 ### wxml分析器
 
-使用方法：将解压出来的page-frame.html文件放入该文件夹下，打开index.php即可进行分析
+使用方法：将解压出来的page-frame.html文件放入该文件夹下，打开index.php?p=page-frame.html即可进行分析
 
 #### 一定是要未被格式化过的page-frame.html，否则会出现各种很奇怪的问题
 
