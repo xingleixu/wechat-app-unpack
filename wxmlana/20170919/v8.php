@@ -13,7 +13,7 @@ $return_root=array();
 $raw_str=file_get_contents($file_name);
 $raw_str=substr($raw_str,strpos($raw_str,"(function(z){"));
 $raw_str=substr($raw_str,0,strpos($raw_str,"if(path&&e_[path]){"));
-$raw_z_len=strpos($raw_str,"})(z);")+7;
+$raw_z_len=strpos($raw_str,"})(z);")+6;
 $raw_z=substr($raw_str,0,$raw_z_len);
 $raw_wxml=substr($raw_str,$raw_z_len);
 $raw_z=str_replace("\n","",$raw_z);
@@ -104,11 +104,24 @@ $return_root["pre_d"]=$pre_d;
 $path=array();
 foreach($e as $tmp_e){
 	$tmp_e=trim($tmp_e);
+	$tmp_tmp=$tmp_e;
+	//$tmp_e=substr($tmp_e,4,strpos($tmp_e,"\"]")-4);
+	$tmp_e=substr($tmp_e,strpos($tmp_e,"e_[")+4);
+	$tmp_e=substr($tmp_e,0,strpos($tmp_e,"]=")-1);
+	$tmp_tmp=substr($tmp_tmp,strpos($tmp_tmp,"{f:")+4);
+	$tmp_tmp=substr($tmp_tmp,0,strpos($tmp_tmp,",j:"));
+	$path[$tmp_e]=$tmp_tmp;
+}
+
+$return_root["e"]=$path;
+
+
+$path=array();
+foreach($e as $tmp_e){
+	$tmp_e=trim($tmp_e);
 	$tmp_e=substr($tmp_e,4,strpos($tmp_e,"\"]")-4);
 	$path[]=$tmp_e;
 }
-
-$return_root["e"]=$e;
 $return_root["path"]=$path;
 
 $m_func=array();

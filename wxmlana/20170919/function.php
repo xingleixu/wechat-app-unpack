@@ -553,95 +553,110 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
 EOT;
 
 $func_path=<<< EOT
-if ((path && e_[path]) || (path == "ana")) {
-	window.__wxml_comp_version__ = 0.02
-	return function(env, dd, global) {
-		if (path == "ana") {
-			for (var ijk in d_) {
-				tmp_path = ijk;
-				\$gwxc = 0;
-				var root = {
-					"tag": "wx-page"
-				};
-				root.children = [];
-				//var main = d_[tmp_path][]
-				var main = e_[tmp_path].f
-				if (typeof(window.__webview_engine_version__) != 'undefined' && window.__webview_engine_version__ + 1e-6 >=0.02 + 1e-6 && window.__mergeData__) {
-					env = window.__mergeData__(env, dd);
-				}
-				if (typeof global === "undefined") global = {};
-				global.f = f_[tmp_path];
-				if (typeof(global.valuekey) === 'undefined') global.valuekey = 0;
-				try {
-					main(env, {}, root, global);
-					if (typeof(window.__webview_engine_version__) == 'undefined' || window.__webview_engine_version__ + 1e-6 <0.01 + 1e-6) {
-						_ev(root);
-					}
-				} catch (err) {
-					console.log(err)
-				}	
-				console.log("\n<!------------------------------页面分割--------------------->");
-				console.log(removefirstdot(ijk));
-				console.log("<!--本页去除<template>后的内容（去掉的为改页定义的template，外部应用的正常显示）-->");
-				for(var tempath in e_[tmp_path].ti){
-					console.log("<import  src=\""+ e_[tmp_path].ti[tempath]+"\"  />");
-				}
-				if(root.children.length<=0){
-					console.log("\n<!------------------------------没有具体内容，为template页面--------------------->");
-				}
-				console.log(ana(root));
-			}
-			console.log('带有template 模板的页面');
-			//解析template 页面里内容
-			for (var tepath in d_) {
-				for (var temid in d_[tepath]) {
-					if(temid){
-						console.log("\n<!------------------------------------------>"   );	
-						console.log("\n<!-本页定义的template模板  " + removefirstdot(tepath)  +"----------------------------------------->"   );		
-						console.log("<!--↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓-->	");
-						break;
-					}
-				}
-				for (var temid in d_[tepath]) {
-					if(temid){
-						console.log("<!---------"+temid+"--------------->	");
-						if (typeof(d_[tepath][temid]) == "function") {
-							console.log(ana(d_[tepath][temid]({}, {}, {
-								tag: 'template',
-								children: [],
-								name: temid
-							}, global)))
-						}
-					}
-				}
-				//console.log("<!--↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑-->	");
-			}
-		} 
-		else {
-			\$gwxc = 0;
-			var root = {
-				"tag": "wx-page"
-			};
-			root.children = []
-			var main = e_[path].f
-			if (typeof global === "undefined") global = {};
-			global.f = \$gdc(f_[path], "", 1);
-			if (typeof(window.__webview_engine_version__) != 'undefined' && window.__webview_engine_version__ + 1e-6 >= 0.02 + 1e-6 && window.__mergeData__) {
-				env = window.__mergeData__(env, dd);
-			}
-			try {
-				main(env, {}, root, global);
-				console.log(ana(root));
-				if (typeof(window.__webview_engine_version__) == 'undefined' || window.__webview_engine_version__ + 1e-6 < 0.01 + 1e-6) {
-					return _ev(root);
-				}
-			} catch (err) {
-				console.log(err)
-			}
-			console.log(root);
-			console.log(ana(root));
-		}
-	}
+if ((path && e_[path]) || (path == "666") || e_["." + path] || path == "all") {
+    window.__wxml_comp_version__ = 0.02;
+    return function (env, dd, global) {
+        if (path == "all") {
+            for (var ijk in d_) console.log(ijk);
+        } else if (path == "666") {
+            for (var ijk in d_) {
+                tmp_path = ijk;
+                \$gwxc = 0;
+                var root = {
+                    "tag": "wx-page"
+                };
+                root.children = [];
+                var main = e_[tmp_path].f;
+                if (typeof (window.__webview_engine_version__) != "undefined" && window.__webview_engine_version__ + 0.000001 >= 0.02 + 0.000001 && window.__mergeData__) {
+                    env = window.__mergeData__(env, dd)
+                }
+                if (typeof global === "undefined") {
+                    global = {}
+                }
+                global.f = f_[tmp_path];
+                if (typeof (global.valuekey) === "undefined") {
+                    global.valuekey = 0
+                }
+                try {
+                    main(env, {}, root, global);
+                    if (typeof (window.__webview_engine_version__) == "undefined" || window.__webview_engine_version__ + 0.000001 < 0.01 + 0.000001) {
+                        _ev(root)
+                    }
+                } catch (err) {
+                    console.log(err)
+                }
+                console.warn("%c\\n<-- ----------------------------页面分割------------------- -->", "color:red");
+                console.group(removefirstdot(ijk));
+                console.log("<!-- 本页的所有内容");
+                var importstr = "";
+                for (var tempath in e_[tmp_path].ti) {
+                    importstr += '<import  src="' + e_[tmp_path].ti[tempath] + '"  />\\n'
+                }
+                var templatestr = "";
+                for (var temid in d_[tmp_path]) {
+                    if (temid) {
+                        if (typeof (d_[tmp_path][temid]) == "function") {
+                            templatestr += "<!--   " + temid + "    -->\\n" + ana(d_[tmp_path][temid]({}, {}, {
+                                tag: "template",
+                                children: [],
+                                name: temid
+                            }, global)) + "\\n"
+                        }
+                    }
+                }
+                console.log("------------- -->\\n" + importstr + ana(root) + "\\n" + templatestr);
+                console.groupEnd()
+            }
+        } else {
+            \$gwxc = 0;
+            var root = {
+                "tag": "wx-page"
+            };
+            root.children = [];
+            path = path.indexOf(".") == 0 ? path : "." + path;
+            var main = e_[path].f;
+            if (typeof (window.__webview_engine_version__) != "undefined" && window.__webview_engine_version__ + 0.000001 >= 0.02 + 0.000001 && window.__mergeData__) {
+                env = window.__mergeData__(env, dd)
+            }
+            if (typeof global === "undefined") {
+                global = {}
+            }
+            /*global.f = f_[path];
+            if (typeof (global.valuekey) === "undefined") {
+                global.valuekey = 0
+            }*/
+            try {
+                main(env, {}, root, global);
+                if (typeof (window.__webview_engine_version__) == "undefined" || window.__webview_engine_version__ + 0.000001 < 0.01 + 0.000001) {
+                    _ev(root)
+                }
+            } catch (err) {
+                console.log(err)
+            }
+            console.warn("%c\\n<-- ----------------------------页面分割------------------- -->", "color:red");
+            console.group(removefirstdot(path));
+            console.log("<!-- 本页的所有内容");
+            var importstr = "";
+            for (var tempath in e_[path].ti) {
+                importstr += '<import  src="' + e_[path].ti[tempath] + '"  />\\n'
+            }
+            var templatestr = "";
+            for (var temid in d_[path]) {
+                if (temid) {
+                    if (typeof (d_[path][temid]) == "function") {
+                        templatestr += "<!--   " + temid + "    -->\\n" + ana(d_[path][temid]({}, {}, {
+                            tag: "template",
+                            children: [],
+                            name: temid
+                        }, global)) + "\\n"
+                    }
+                }
+            }
+            console.log("------------- -->\\n" + importstr + ana(root) + "\\n" + templatestr);
+            console.groupEnd()
+			return importstr + ana(root) + templatestr;
+        };
+    }
 }
 
 EOT;

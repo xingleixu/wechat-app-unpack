@@ -16,7 +16,10 @@ if($file_name!=""){
 	}elseif(strpos($tmp_str,"v0.6vv_20170919_fbi_wxs")!==false){
 		$dir="./20170919/";
 		$file_path=$dir."replace.php";
-	}elseif(strpos($tmp_str,"v0.6vv_20171201_cua_xc")!==false){
+	}elseif(strpos($tmp_str,"v0.6vv_20171120_cua_xc")!==false){
+		$dir="./20171120/";
+		$file_path=$dir."replace.php";
+    }elseif(strpos($tmp_str,"v0.6vv_20171201_cua_xc")!==false){
 		$dir="./20171201/";
 		$file_path=$dir."replace.php";
     }elseif(strpos($tmp_str,"v0.6vv_20171208_cua_xc")!==false){
@@ -56,7 +59,11 @@ if($file_name!=""){
 	echo $_GET["path"];
 	?>')();
 	var app=document.getElementById("app");
-	app.innerText=""+ana(node)+"";
+	console.log(typeof(node));
+	if(typeof(node)=="object"){
+		node=ana(node);
+	}
+	app.innerText=""+node+"";
 	function format(){
 		app.innerText=formatXml(app.innerText);
 	}

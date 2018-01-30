@@ -1,12 +1,14 @@
 <html>
 <head>
 <title>wxml分析器</title>
+<script src="jquery.min.js"></script>
 <script>
 <?php
-$file_name="page-frame.html";
-/*if($_GET["p"]!=""){
+error_reporting(0);
 $file_name=$_GET["p"];
-}*/
+if($file_name==""){
+	$file_name="page-frame.html";
+}
 if($file_name!=""){
 	$tmp_str=file_get_contents($file_name);
 	if(strpos($tmp_str,"v0.6vv_20170214_fbi")!==false){
@@ -15,7 +17,10 @@ if($file_name!=""){
 	}elseif(strpos($tmp_str,"v0.6vv_20170919_fbi_wxs")!==false){
 		$dir="./20170919/";
 		$file_path=$dir."v8.php";
-	}elseif(strpos($tmp_str,"v0.6vv_20171201_cua_xc")!==false){
+	}elseif(strpos($tmp_str,"v0.6vv_20171120_cua_xc")!==false){
+		$dir="./20171120/";
+		$file_path=$dir."v8.php";
+    }elseif(strpos($tmp_str,"v0.6vv_20171201_cua_xc")!==false){
 		$dir="./20171201/";
 		$file_path=$dir."v8.php";
     }elseif(strpos($tmp_str,"v0.6vv_20171208_cua_xc")!==false){
@@ -46,7 +51,7 @@ eval(root["z"]);
 <span>版本：<?php echo $dir?></span>
 <!--<input id="file_path" type="text" placeholder="请输入相对文件路径"/><button onclick="redirect();">分析</button>-->
 <br>
-<select id="path" onclick="choosepath(this.value)" style="float:left;">
+<select id="path" onclick="choosepath(this)" style="float:left;">
 
 </select>
 <div style="float:left;">
@@ -58,7 +63,7 @@ eval(root["z"]);
 <div style="clear:both;"></div>
 <div style="width:100%;padding:0;margin:0;">
 <div style="float:left;width:50%;padding:0;margin:0;">
-<span>混淆代码</span>
+<span>混淆代码(不解析template模板)</span>
 <div id="code">
 待选择路径
 </div>
@@ -76,24 +81,31 @@ function redirect(){
 	window.location.href=window.location.href+"?p="+file_path.value;
 }
 var div_code=document.getElementById("code");
-//div_code.innerHTML=root["pre"][0];
 var select_path=document.getElementById("path");
 var tmp=document.createElement("option");
 tmp.innerText="请选择路径";
 tmp.value="none";
 select_path.appendChild(tmp);
 
-for(var i=0;i<root["path"].length;i++){
+for(var ix in root["e"]){
 	var tmp=document.createElement("option");
-	tmp.innerText=root["path"][i];
-	tmp.value=i;
+	tmp.innerText=ix;
+	tmp.dataset.path=ix;
+	tmp.value=root["e"][ix];
 	select_path.appendChild(tmp);
 }
 
 var ifr_node=document.getElementById("node");
-function choosepath(val){
-	div_code.innerHTML=root["pre"][val];
-	ifr_node.src="node.php?p=<?php echo $file_name;?>&path="+root["path"][val];
+function choosepath(obj){
+	var val=obj.value;
+	var path=$("#path").find("option:selected").attr("data-path");
+	for(var i in root["pre"]){
+		if(root["pre"][i].indexOf("var m"+val)>0){
+			div_code.innerHTML=root["pre"][i];
+			break;
+		}
+	}
+	ifr_node.src="node.php?p=<?php echo $file_name;?>&path="+path;
 }
 
 function findz(val){

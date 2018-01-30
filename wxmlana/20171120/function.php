@@ -413,11 +413,11 @@ EOT;
 
 $func_o=<<< EOT
 function _o(opindex, env, scope, global) {
-    //global.opindex = opindex;
+    global.opindex = opindex + idx_st_;
     var nothing = {};
-    wxif[mm] = grb(z[opindex], env, scope, global, nothing);
-    //console.log("_O-----"+grb(z[opindex], env, scope, global, nothing));
-    //return grb(z[opindex], env, scope, global, nothing);
+    wxif[mm] = grb(z[opindex + idx_st_], env, scope, global, nothing);
+    //console.log("_O-----"+grb(z[opindex + idx_st_], env, scope, global, nothing));
+    //return grb(z[opindex + idx_st_], env, scope, global, nothing);
     var dd = wxif[mm];
     mm += 1;
     return dd;
@@ -439,31 +439,30 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
     var _y;
     if (_n) {
         if (type === 'A') {
-            var r_iter_item;
             for (var i = 0; i < to_iter.length; i++) {
                 scope[itemname] = to_iter[i];
                 scope[indexname] = _n ? i : wh.nh(i, 'h');
-                r_iter_item = wh.rv(to_iter[i]);
-                var key = keyname && r_iter_item ? (keyname === "*this" ? r_iter_item : wh.rv(r_iter_item[keyname])) : undefined;
+                var key = keyname ? (keyname === "*this" ? wh.rv(to_iter[i]) : wh.rv(wh.rv(to_iter[i])[keyname])) : undefined;
                 _y = _v(key);
                 _(father, _y);
-                global.valuekey = i + 1;
+                global.valuekey.push(key ? key : i);
                 func(env, scope, _y, global);
+                global.valuekey.pop();
             }
         } else if (type === 'O') {
             var i = 0;
             for (var k in to_iter) {
                 scope[itemname] = to_iter[k];
                 scope[indexname] = _n ? k : wh.nh(k, 'h');
-                r_iter_item = wh.rv(to_iter[k]);
-                var key = keyname && r_iter_item ? (keyname === "*this" ? r_iter_item : wh.rv(r_iter_item[keyname])) : undefined;
+                var key = keyname ? (keyname === "*this" ? wh.rv(to_iter[k]) : wh.rv(wh.rv(to_iter[k])[keyname])) : undefined;
                 _y = _v(key);
                 _(father, _y);
-                global.valuekey = i + 1;
-                i++
+                global.valuekey.push(key ? key : i);
                 func(env, scope, _y, global);
+                global.valuekey.pop();
+                i++;
             }
-        } else if (type === 'S') { //to_iter.length
+        } else if (type === 'S') {
             for (var i = 0; i < 1; i++) {
                 scope[itemname] = itemname;
                 scope[indexname] = indexname; //wx:key
@@ -471,8 +470,9 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
                 _y["wx:key"] = keyname;
                 _y["wx:for-item"] = itemname;
                 _(father, _y);
-                //global.valuekey = i + 1;
+                //global.valuekey.push(to_iter[i] + i);
                 func(env, scope, _y, global);
+                //global.valuekey.pop();
             }
         } else if (type === 'N') {
             for (var i = 0; i < to_iter; i++) {
@@ -480,8 +480,9 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
                 scope[indexname] = _n ? i : wh.nh(i, 'h');
                 _y = _v(i);
                 _(father, _y);
-                global.valuekey = i + 1;
+                global.valuekey.push(i);
                 func(env, scope, _y, global);
+                global.valuekey.pop();
             }
         } else {}
     } else {
@@ -494,11 +495,12 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
                 r_iter_item = wh.rv(iter_item);
                 scope[itemname] = iter_item
                 scope[indexname] = _n ? i : wh.nh(i, 'h');
-                var key = keyname && r_iter_item ? (keyname === "*this" ? r_iter_item : wh.rv(r_iter_item[keyname])) : undefined;
+                var key = keyname ? (keyname === "*this" ? r_iter_item : wh.rv(r_iter_item[keyname])) : undefined;
                 _y = _v(key);
                 _(father, _y);
-                global.valuekey = i + 1;
+                global.valuekey.push(key ? key : i);
                 func(env, scope, _y, global);
+                global.valuekey.pop();
             }
         } else if (type === 'O') {
             var i = 0;
@@ -507,13 +509,14 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
                 iter_item = wh.hn(iter_item) === 'n' ? wh.nh(iter_item, 'h') : iter_item;
                 r_iter_item = wh.rv(iter_item);
                 scope[itemname] = iter_item;
-                scope[indexname] = wh.nh(k, 'h');
-                var key = keyname && r_iter_item ? (keyname === "*this" ? r_iter_item : wh.rv(r_iter_item[keyname])) : undefined;
+                scope[indexname] = _n ? k : wh.nh(k, 'h');
+                var key = keyname ? (keyname === "*this" ? r_iter_item : wh.rv(r_iter_item[keyname])) : undefined;
                 _y = _v(key);
                 _(father, _y);
-                global.valuekey = i + 1;
+                global.valuekey.push(key ? key : i);
                 func(env, scope, _y, global);
-                i++;
+                global.valuekey.pop();
+                i++
             }
         } else if (type === 'S') {
             for (var i = 0; i < r_to_iter.length; i++) {
@@ -522,18 +525,20 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
                 scope[indexname] = _n ? i : wh.nh(i, 'h');
                 _y = _v(to_iter[i] + i);
                 _(father, _y);
-                global.valuekey = i + 1;
+                global.valuekey.push(to_iter[i] + i);
                 func(env, scope, _y, global);
+                global.valuekey.pop();
             }
         } else if (type === 'N') {
             for (var i = 0; i < r_to_iter; i++) {
                 iter_item = wh.nh(i, 'h');
                 scope[itemname] = iter_item;
-                scope[indexname] = wh.nh(i, 'h');
+                scope[indexname] = _n ? i : wh.nh(i, 'h');
                 _y = _v(i);
                 _(father, _y);
-                global.valuekey = i + 1;
+                global.valuekey.push(i);
                 func(env, scope, _y, global);
+                global.valuekey.pop();
             }
         } else {}
     }
@@ -547,9 +552,7 @@ function wfor(to_iter, func, env, _s, global, father, itemname, indexname, keyna
     } else {
         delete scope[indexname];
     }
-    //global.valuekey = 0;
 }
-
 EOT;
 
 $func_path=<<< EOT
@@ -575,7 +578,7 @@ if ((path && e_[path]) || (path == "666") || e_["." + path] || path == "all") {
                 }
                 global.f = f_[tmp_path];
                 if (typeof (global.valuekey) === "undefined") {
-                    global.valuekey = 0
+                    global.valuekey = [];
                 }
                 try {
                     main(env, {}, root, global);
@@ -621,10 +624,10 @@ if ((path && e_[path]) || (path == "666") || e_["." + path] || path == "all") {
             if (typeof global === "undefined") {
                 global = {}
             }
-            /*global.f = f_[path];
+            global.f = f_[path];
             if (typeof (global.valuekey) === "undefined") {
-                global.valuekey = 0
-            }*/
+                global.valuekey = [];
+            }
             try {
                 main(env, {}, root, global);
                 if (typeof (window.__webview_engine_version__) == "undefined" || window.__webview_engine_version__ + 0.000001 < 0.01 + 0.000001) {

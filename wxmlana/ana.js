@@ -26,27 +26,32 @@ function ana(raw) {
                     str += "<" + raw[i];
                 }
 
-                if (raw["wxVkey"] == "2") {
-
-                    str += " wx:if=\"" + wxif[raw["mm"]] + "\" >";
+                if (raw["wxVkey"] !="1" && raw["wxVkey"] !="0" && raw["wxVkey"] !=undefined && !isNaN(raw["wxVkey"])) {
+                    str += ' wx:if="' + wxif[raw["mm"]] + '" >';
                     for (var k in raw["children"]) {
-                        if (k == 1) {
+                    	console.log(raw["wxVkey"])
+                        if (k == 1) { 
+                        	if (raw["tiaojian"] == "") {
                             str += "<block wx:else>"
+	                        }
+	                        if (raw["tiaojian"] != "") {
+	                            str += '<block wx:elif="'+ raw["tiaojian"] +'">'
+	                        }
                         }
                         if (k === 2) {
                             str += "<!--  不确定  -->"
                         }
-                        if (typeof (raw["children"][k]) == "object") {
-                            str += ana(raw["children"][k]);
+                        if (typeof(raw["children"][k]) == "object") {
+                            str += ana(raw["children"][k])
                         } else {
-                            str += raw["children"][k];
+                            str += raw["children"][k].replace(/(^\s*)|(\s*$)/g, "")
                         }
                         if (k == 0) {
                             str += "</block>"
                         }
                     }
                     str += "</block>";
-                    continue;
+                    continue
                 }
                 if (raw["wxVkey"] == "1") {
                     str += " wx:if=\"" + wxif[raw["mm"]] + "\"";

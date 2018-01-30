@@ -1,34 +1,40 @@
 <?php
 //v0.6vv_20170214_fbi
 
-if($file_name==""){
 	$file_name=$_GET["p"];
-}
 
+
+$z=array();
 function Z($ops){
-    return $ops;
+	$z[]=$ops;
+    //return $ops;
 }
 
 $return_root=array();
-
 $raw_str=file_get_contents($file_name);
 $raw_str=substr($raw_str,strpos($raw_str,"(function(z){"));
 $raw_str=substr($raw_str,0,strpos($raw_str,"if(path&&e_[path]){"));
 $raw_z_len=strpos($raw_str,"})(z);")+6;
 $raw_z=substr($raw_str,0,$raw_z_len);
 $raw_wxml=substr($raw_str,$raw_z_len);
-//echo $raw_wxml;
-//$raw_z=str_replace("\n","",$raw_z);
+$raw_x=substr($raw_wxml,strpos($raw_wxml,"var x=")+4);
+$raw_x=substr($raw_x,0,strpos($raw_x,"];")+2);
+$raw_x="$".$raw_x;
+eval("".$raw_x."return \$x;");
+$raw_z=str_replace("\n","",$raw_z);
 /*preg_match_all('/Z\(\[(.*)\]\)/U', $raw_z, $raw_z_func);
 $raw_z_arr=$raw_z_func[0];
-$z=array();
-foreach($raw_z_arr as $tmp){
+foreach($raw_z_arr as $id=>$tmp){
+	$tmp=str_replace("Z(","Z(\"",$tmp);
+    $tmp=str_replace("idx_st_+","",$tmp);
     $tmp=str_replace("a,","11,",$tmp);
-    $tmp=str_replace("z[","\$z[",$tmp);
-    $z[]=eval("return ".$tmp.";");
+    //$tmp=str_replace("z[","\$z[",$tmp);
+	$tmp=str_replace("])","]\")",$tmp);
+	//echo $tmp;
+    eval("".$tmp.";");
 }*/
 
-$return_root["z"]=$raw_z;
+$return_root["z"]="var idx_st_=0;".$raw_z;
 //echo json_encode($z);
 
 $raw_wxml_func=explode("\n",$raw_wxml);
@@ -38,7 +44,7 @@ $m=array();
 $e=array();
 for($i=0;$i<count($raw_wxml_func);$i++){
     $tmp_str=$raw_wxml_func[$i];
-    if(strpos($tmp_str,"var")!==false&&strpos($tmp_str,"function(e,s,r,gg)")!==false){
+    if(strpos($tmp_str,"var")!==false&&strpos($tmp_str,"function(e,s,r,gg){")!==false){
         $sum_str="";
         $str_type=1;
     }
@@ -52,7 +58,7 @@ for($i=0;$i<count($raw_wxml_func);$i++){
         }
     }
     if(strpos($tmp_str,"e_[\"")!==false){
-        //$sum_str="".$tmp_str;
+        $sum_str="".$tmp_str;
         $str_type=3;
         //continue;
     }
@@ -64,19 +70,19 @@ for($i=0;$i<count($raw_wxml_func);$i++){
         }
         $sum_str="";
         $str_type=0;
+		continue;
     }
     if(strpos($tmp_str,"ic:[")!==false){
-        $e[]=trim(" ".$sum_str);
+        $e[]=trim(" ".$sum_str."}");
         $sum_str="";
         $str_type=0;
     }
 }
-//var_dump($m);
 
 $d_func=array();
 $pre_d=array();
 foreach($d as $idx=>$tmp_d){
-	if(strpos($tmp_d,"function(e,s,r,gg)")===false){
+	if(strpos($tmp_d,"function(e,s,r,gg){")===false){
 		continue;
 	}
     $d_func["d".$idx]=explode("\n",$tmp_d);
@@ -104,29 +110,20 @@ foreach($d as $idx=>$tmp_d){
 $return_root["d"]=$d;
 $return_root["pre_d"]=$pre_d;
 
-
 $path=array();
 foreach($e as $tmp_e){
 	$tmp_e=trim($tmp_e);
 	$tmp_tmp=$tmp_e;
 	//$tmp_e=substr($tmp_e,4,strpos($tmp_e,"\"]")-4);
-	$tmp_e=substr($tmp_e,strpos($tmp_e,"e_[")+4);
+	$tmp_e=substr($tmp_e,strpos($tmp_e,"x[")+2);
 	$tmp_e=substr($tmp_e,0,strpos($tmp_e,"]=")-1);
 	$tmp_tmp=substr($tmp_tmp,strpos($tmp_tmp,"{f:")+4);
 	$tmp_tmp=substr($tmp_tmp,0,strpos($tmp_tmp,",j:"));
-	$path[$tmp_e]=$tmp_tmp;
+	$path[$x[$tmp_e]]=$tmp_tmp;
 }
 
 $return_root["e"]=$path;
-
-$path=array();
-foreach($e as $tmp_e){
-	$tmp_e=trim($tmp_e);
-	$tmp_e=substr($tmp_e,strpos($tmp_e,"[\"")+2,strpos($tmp_e,"\"]")-6);
-	$path[]=$tmp_e;
-}
-
-$return_root["path"]=$path;
+$return_root["path"]=$x;
 
 $m_func=array();
 $pre=array();
@@ -167,6 +164,7 @@ foreach($m as $idx=>$tmp_m){
 		if(strpos($tmp_m_func,"_m(")!==false){
 			$tmp_m_func.="  //创建非容器类节点";
 		}
+		
 		
 		$tmp_str.=$tmp_m_func."\n";
 		if(strpos($tmp_m_func,"{")!==false&&strpos($tmp_m_func,"{{")===false){

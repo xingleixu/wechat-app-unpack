@@ -116,11 +116,16 @@ $return_root["pre_d"]=$pre_d;
 $path=array();
 foreach($e as $tmp_e){
 	$tmp_e=trim($tmp_e);
-	$tmp_e=substr($tmp_e,4,strpos($tmp_e,"\"]")-4);
-	$path[]=$tmp_e;
+	$tmp_tmp=$tmp_e;
+	//$tmp_e=substr($tmp_e,4,strpos($tmp_e,"\"]")-4);
+	$tmp_e=substr($tmp_e,strpos($tmp_e,"x[")+2);
+	$tmp_e=substr($tmp_e,0,strpos($tmp_e,"]=")-1);
+	$tmp_tmp=substr($tmp_tmp,strpos($tmp_tmp,"{f:")+4);
+	$tmp_tmp=substr($tmp_tmp,0,strpos($tmp_tmp,",j:"));
+	$path[$x[$tmp_e]]=$tmp_tmp;
 }
 
-$return_root["e"]=$e;
+$return_root["e"]=$path;
 $return_root["path"]=$x;
 
 $m_func=array();
