@@ -28,10 +28,6 @@ $raw_str=$re_wfor.$func_wfor.substr($raw_str,strpos($raw_str,"function _ca("));
 $re_path=substr($raw_str,0,strpos($raw_str,"if(path&&e_[path]){"));
 $raw_str=$re_path.$func_path."}\n".substr($raw_str,strpos($raw_str,"var _C="));
 
-//preg_replace('/else\s+({\s+\w+\.wxVkey)/','if (1==1)',$raw_str);
-//$raw_str=str_replace("<","&lt;",$raw_str);
-//$raw_str=str_replace(">","&gt;",$raw_str);
-//echo "<pre>".$raw_str."</pre>";
 echo $raw_str."\n";
 
 ?>

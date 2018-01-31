@@ -28,17 +28,6 @@ $raw_str=$re_wfor.$func_wfor.substr($raw_str,strpos($raw_str,"function _ca("));
 $re_path=substr($raw_str,0,strpos($raw_str,"if(path&&e_[path]){"));
 $raw_str=$re_path.$func_path."}\n".substr($raw_str,strpos($raw_str,"var BASE_DEVICE_WIDTH"));
 
-$raw_arr=array();
-preg_match_all('/else\{(.*)\.wxVkey/U',$raw_str,$raw_arr);
-foreach($raw_arr[0] as $tmp_arr){
-	$tmp_str_s=substr($raw_str,0,strpos($raw_str,$tmp_arr));
-	$tmp_str_e=substr($raw_str,strpos($raw_str,$tmp_arr)+4);
-	$raw_str=$tmp_str_s."if(1==1)".$tmp_str_e;
-}
-
-//$raw_str=str_replace("<","&lt;",$raw_str);
-//$raw_str=str_replace(">","&gt;",$raw_str);
-//echo "<pre>".$raw_str."</pre>";
 echo $raw_str."\n";
 
 ?>
